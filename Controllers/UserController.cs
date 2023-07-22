@@ -6,14 +6,22 @@ namespace DotnetAPI.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-
-    public UserController()
+    DataContextDapper _dapper;
+    public UserController(IConfiguration config)
     {
+        // Console.WriteLine(config.GetConnectionString("DefalultConnection"));
+        _dapper = new DataContextDapper(config);
     }
 
     [HttpGet("GetUsers/{testValue}")]
     public string[] GeUserst(string testValue)
     {
         return new string[] {"Trishten", "Lity", testValue};
+    }
+
+    [HttpGet("TestConnection")]
+    public DateTime TestConnection()
+    {
+        return _dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
     }
 }
